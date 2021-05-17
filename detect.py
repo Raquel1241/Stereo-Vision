@@ -1,3 +1,5 @@
+# https://realpython.com/face-recognition-with-python/
+
 def detectFace(image):
 	casc = NULL # Path to the cascade which is the basis of the face detection
 	faceCascade = cv2.CascadeClassifier(casc)
@@ -13,6 +15,6 @@ def detectFace(image):
 		#flags = cv2.CV_HAAR_SCALE_IMAGE	# Face detection template to use
 	)
 
-	print "Found {0} faces!".format(len(faces)) # print how many faces were found
+	print("Found {0} faces!".format(len(faces))) # print how many faces were found
 	
 	return faces
