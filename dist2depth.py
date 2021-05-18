@@ -3,6 +3,7 @@
 #	https://www.geeksforgeeks.org/numpy-size-function-python/
 #
 import numpy as np
+#import cv2
 bl = None # distance between the 2 camera's
 foc = None # Focal distance of the 2 camera's
 

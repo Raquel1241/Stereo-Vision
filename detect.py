@@ -1,4 +1,5 @@
 # https://realpython.com/face-recognition-with-python/
+import cv2
 
 def detectFace(image):
 	casc = NULL # Path to the cascade which is the basis of the face detection
