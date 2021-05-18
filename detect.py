@@ -28,7 +28,7 @@ def detectFace(image):
 	return faces
 
 
-imgPath = "..\img1.jpeg"
+imgPath = "..\img1.jpeg" # enter file for faces to be detected in
 img = cv2.imread(imgPath)
 faces = detectFace(img)
 print(faces)
