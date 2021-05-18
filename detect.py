@@ -2,7 +2,7 @@
 import cv2
 
 def detectFace(image):
-	casc = "..\haarcascade_frontalface_default.xml" # Path to the cascade which is the basis of the face detection | https://github.com/opencv/opencv/tree/master/data/haarcascades
+	casc = "..\cascade.xml" # Path to the cascade which is the basis of the face detection | haarcascade_frontalface_default | https://github.com/opencv/opencv/tree/master/data/haarcascades
 	faceCascade = cv2.CascadeClassifier(casc)
 
 	#image = cv2.imread(imgPath) # in case the parsed image is not read yet
