@@ -1,5 +1,5 @@
 # source: https://github.com/niconielsen32/ComputerVision/blob/master/cameraCalibration.py
-
+# https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html
 import numpy as np
 import cv2 as cv
 import glob
@@ -10,7 +10,6 @@ import glob
 
 chessboardSize = (24,17)
 frameSize = (1440,1080)
-
 
 
 # termination criteria
@@ -24,14 +23,14 @@ objp[:,:2] = np.mgrid[0:chessboardSize[0],0:chessboardSize[1]].T.reshape(-1,2)
 
 # Arrays to store object points and image points from all the images.
 objpoints = [] # 3d point in real world space
-imgpoints = [] # 2d points in image plane.
+imgpoints = [] # 2d points in image plane
 
 
-images = glob.glob('*.png') # more elegant solution
+images = glob.glob('*.jpg')
 
-for image in images:
+for fname in images:
 
-    img = cv.imread(image)
+    img = cv.imread(fname)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
     # Find the chess board corners
@@ -39,19 +38,18 @@ for image in images:
 
     # If found, add object points, image points (after refining them)
     if ret == True:
-
         objpoints.append(objp)
+
         corners2 = cv.cornerSubPix(gray, corners, (11,11), (-1,-1), criteria)
         imgpoints.append(corners)
 
         # Draw and display the corners
         cv.drawChessboardCorners(img, chessboardSize, corners2, ret)
         cv.imshow('img', img)
-        cv.waitKey(1000)
+        cv.waitKey(500) 
 
 
 cv.destroyAllWindows()
-
 
 
 
@@ -62,14 +60,14 @@ ret, cameraMatrix, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints,
 
 ############## UNDISTORTION #####################################################
 
-img = cv.imread('cali5.png')
+img = cv.imread('left12.jpg')
 h,  w = img.shape[:2]
-newCameraMatrix, roi = cv.getOptimalNewCameraMatrix(cameraMatrix, dist, (w,h), 1, (w,h))
+newcameramtx, roi = cv.getOptimalNewCameraMatrix(cameraMatrix, dist, (w,h), 1, (w,h))
 
 
 
 # Undistort
-dst = cv.undistort(img, cameraMatrix, dist, None, newCameraMatrix)
+dst = cv.undistort(img, cameraMatrix, dist, None, newcameramtx)
 
 # crop the image
 x, y, w, h = roi
@@ -77,17 +75,14 @@ dst = dst[y:y+h, x:x+w]
 cv.imwrite('caliResult1.png', dst)
 
 
-
 # Undistort with Remapping
-mapx, mapy = cv.initUndistortRectifyMap(cameraMatrix, dist, None, newCameraMatrix, (w,h), 5)
+mapx, mapy = cv.initUndistortRectifyMap(cameraMatrix, dist, None, newcameramtx, (w,h), 5)
 dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
 
 # crop the image
 x, y, w, h = roi
 dst = dst[y:y+h, x:x+w]
-cv.imwrite('caliResult2.png', dst)
-
-
+cv.imwrite('calibreulst.png', dst)
 
 
 # Reprojection Error
