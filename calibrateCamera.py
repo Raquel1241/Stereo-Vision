@@ -1,5 +1,5 @@
-# source: https://github.com/niconielsen32/ComputerVision/blob/master/cameraCalibration.py
-# https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html
+# source: https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html
+
 import numpy as np
 import cv2 as cv
 import glob
