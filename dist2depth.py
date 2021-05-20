@@ -1,12 +1,16 @@
 # Fucntion to calculate the depth of an object from the distance between the centers of object detection based boxes
+#	Based on stereo vision
 #
 #	https://www.geeksforgeeks.org/numpy-size-function-python/
 # Stereo calc:
 #	https://ijirae.com/volumes/Vol4/iss11/05.NVAE10087.pdf
 #	https://www.researchgate.net/profile/Manaf-Zivingy/publication/305308988_Object_distance_measurement_by_stereo_vision/links/5788c12d08aeef933e1b9b35/Object-distance-measurement-by-stereo-vision.pdf
-#
+# OpenCV Stereo doc:
+#	https://docs.opencv.org/master/dd/d53/tutorial_py_depthmap.html 
+
 import numpy as np
 #import cv2
+
 bl = None # distance between the 2 camera's
 foc = None # Focal distance of the 2 camera's
 
