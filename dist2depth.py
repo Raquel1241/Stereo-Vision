@@ -12,6 +12,7 @@ OpenCV Stereo doc:
 
 import numpy as np
 import cv2
+from matplotlib import pyplot as plt
 
 bl = None # distance between the 2 camera's
 foc = None # Focal distance of the 2 camera's
@@ -52,7 +53,10 @@ def disp(imL: list, imR: list):
 	"""A function to convert 2 grayscale images into a disparity array.
 	
 	IN:		imageLeft, imageRight (both as greyscale images)
-	OUT:	disparityMap"""
-	stereo = cv2.StereoBM_create(numDisparities=16, blockSize=15)
+	OUT:	disparityMap
+	"""
+	stereo = cv2.StereoBM_create(numDisparities=16, blockSize=9)
 	disparity = stereo.compute(imL,imR)
+	plt.imshow(disparity,'gray')
+	plt.show()
 	return disparity
