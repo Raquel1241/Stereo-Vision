@@ -8,7 +8,7 @@ import numpy as np
 import cv2
 import dist2depth as d2d
 
-debug = True # Variable to easily turn on or off debug information
+debug = False # Variable to easily turn on or off debug information
 
 def detectFace(image):
 	"""
@@ -69,11 +69,13 @@ if debug:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if False:
-	iR = cv2.imread("..\img7_1.jpeg",0)
+if True:
+	iR = cv2.imread("..\img8_1.jpeg")
+	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)
 	iR2 = cv2.equalizeHist(iR)
-	cv2.imshow("right image equalized",iR2)
-	iL = cv2.imread("..\img7_2.jpeg",0)
+	iL = cv2.imread("..\img8_2.jpeg")
+	iL = cv2.cvtColor(iL, cv2.COLOR_BGR2GRAY)
+	cv2.imshow("left image",iL)
 	iL2 = cv2.equalizeHist(iL)
-	dis1 = d2d.disp(iL2,iR2)
+	dis1 = d2d.disp(iL,iR)
