@@ -56,11 +56,11 @@ def disp(imL: list, imR: list):
 	OUT:	disparityMap
 	"""
 	stereo = cv2.StereoBM_create()
-	stereo.setMinDisparity(4)
-	stereo.setNumDisparities(128)
-	stereo.setBlockSize(21)
-	stereo.setSpeckleRange(16)
-	stereo.setSpeckleWindowSize(45)
+	stereo.setMinDisparity(1)
+	stereo.setNumDisparities(256)
+	stereo.setBlockSize(13)
+	stereo.setSpeckleRange(10)
+	stereo.setSpeckleWindowSize(16)
 	disparity = stereo.compute(imL,imR)
 	plt.imshow(disparity,'gray')
 	plt.show()

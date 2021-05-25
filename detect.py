@@ -70,11 +70,11 @@ if debug:
 
 ## Atempted disparity calculation
 if True:
-	iR = cv2.imread("..\img8_1.jpeg")
+	iR = cv2.imread("..\img10_1.jpeg")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)
 	iR2 = cv2.equalizeHist(iR)
-	iL = cv2.imread("..\img8_2.jpeg")
+	iL = cv2.imread("..\img10_2.jpeg")
 	iL = cv2.cvtColor(iL, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("left image",iL)
 	iL2 = cv2.equalizeHist(iL)
