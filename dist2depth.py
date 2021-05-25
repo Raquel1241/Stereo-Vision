@@ -57,7 +57,7 @@ def disp(imL: list, imR: list):
 	"""
 	stereo = cv2.StereoBM_create()
 	stereo.setMinDisparity(1)
-	stereo.setNumDisparities(256)
+	stereo.setNumDisparities(272) # multiple of 16
 	stereo.setBlockSize(13)
 	stereo.setSpeckleRange(10)
 	stereo.setSpeckleWindowSize(16)
