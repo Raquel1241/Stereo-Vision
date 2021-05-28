@@ -8,7 +8,7 @@ import numpy as np
 import cv2
 import dist2depth as d2d
 
-debug = False # Variable to easily turn on or off debug information
+debug = True # Variable to easily turn on or off debug information
 
 def detectFace(image):
 	"""
@@ -25,7 +25,7 @@ def detectFace(image):
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Convert colour image to greyscale
 	#gray = cv2.equalizeHist(gray) # equalize the histogram of the gray image
 
-	faces = faceCascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5, minSize=(40, 40))
+	faces = faceCascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
 	if debug:print("Found {0} faces!".format(len(faces))) # print how many faces were found
 
 	ep = []
@@ -51,10 +51,12 @@ def detectFace(image):
 
 
 #### RUN FILE ####
-imgPath = "..\img1.jpeg" # enter file for faces to be detected in
-img = cv2.imread(imgPath)
-faces,eyes,ep = detectFace(img)
-if debug:
+if False:
+	imgPath = "..\img1.jpeg" # enter file for faces to be detected in
+	img = cv2.imread(imgPath)
+	faces,eyes,ep = detectFace(img)
+
+if False:
 	print("Face locations:")
 	print(faces)
 	print("\n Eyes locations within face box:")
@@ -69,7 +71,7 @@ if debug:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if True:
+if False:
 	iR = cv2.imread("..\img10_1.jpeg")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)
@@ -79,3 +81,25 @@ if True:
 	cv2.imshow("left image",iL)
 	iL2 = cv2.equalizeHist(iL)
 	dis1 = d2d.disp(iL,iR)
+
+if True:
+	imgPath = "..\img_d_50.jpeg" # enter file for faces to be detected in
+	img = cv2.imread(imgPath)
+	print("Face 50 cm:")
+	faces,eyes,ep = detectFace(img)
+	print(faces)
+	imgPath = "..\img_d_70.jpeg" # enter file for faces to be detected in
+	img = cv2.imread(imgPath)
+	print("Face 70 cm:")
+	faces,eyes,ep = detectFace(img)
+	print(faces)
+	imgPath = "..\img_d_100.jpeg" # enter file for faces to be detected in
+	img = cv2.imread(imgPath)
+	print("Face 100 cm:")
+	faces,eyes,ep = detectFace(img)
+	print(faces)
+	imgPath = "..\img_d_140.jpeg" # enter file for faces to be detected in
+	img = cv2.imread(imgPath)
+	print("Face 140 cm:")
+	faces,eyes,ep = detectFace(img)
+	print(faces)
