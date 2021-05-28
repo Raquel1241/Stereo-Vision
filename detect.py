@@ -71,7 +71,7 @@ if False:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if False:
+if True:
 	iR = cv2.imread("..\img10_1.jpeg")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)
