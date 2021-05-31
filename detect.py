@@ -3,14 +3,15 @@ Document to do facial detection within images.
 
 https://realpython.com/face-recognition-with-python/
 
-at ..\xxxxx.jpeg the input images are found.
-at ..\cascade.xml & ..\cascadeEye.xml the face and eye cascades are found
+at ../xxxxx.jpeg the input images are found.
+at ../cascade.xml & ../cascadeEye.xml the face and eye cascades are found
 
 """
 
 import numpy as np
 import cv2
 import dist2depth as d2d
+from matplotlib import pyplot as plt
 
 debug = True # Variable to easily turn on or off debug information
 
@@ -87,11 +88,13 @@ if False:
 	dis1 = d2d.disp(iL,iR)
 
 if True:
+	yv = []
 	imgPath = "..\img_d_50.jpeg" # enter file for faces to be detected in
 	img = cv2.imread(imgPath)
 	print("Face 50 cm:")
 	faces,eyes,ep = detectFace(img)
 	diag = np.sqrt(2*(faces[0][2]**2))
+	yv.append(1/diag)
 	print(faces)
 	print("\t Diagonal: \t {}".format(diag))
 	print("\t Inverse of diagonal: \t\t {}".format(1/diag))
@@ -101,6 +104,7 @@ if True:
 	print("Face 70 cm:")
 	faces,eyes,ep = detectFace(img)
 	diag = np.sqrt(2*(faces[0][2]**2))
+	yv.append(1/diag)
 	print(faces)
 	print("\t Diagonal: \t {}".format(diag))
 	print("\t Inverse of diagonal: \t\t {}".format(1/diag))
@@ -110,6 +114,7 @@ if True:
 	print("Face 100 cm:")
 	faces,eyes,ep = detectFace(img)
 	diag = np.sqrt(2*(faces[0][2]**2))
+	yv.append(1/diag)
 	print(faces)
 	print("\t Diagonal: \t {}".format(diag))
 	print("\t Inverse of diagonal: \t\t {}".format(1/diag))
@@ -119,6 +124,11 @@ if True:
 	print("Face 140 cm:")
 	faces,eyes,ep = detectFace(img)
 	diag = np.sqrt(2*(faces[0][2]**2))
+	yv.append(1/diag)
 	print(faces)
 	print("\t Diagonal: \t {}".format(diag))
 	print("\t Inverse of diagonal: \t\t {}".format(1/diag))
+
+	plt.plot([50, 70, 100, 140], yv)
+	plt.axis([0,140,0,max(yv)])
+	plt.show()
