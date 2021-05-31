@@ -11,7 +11,6 @@ at ../cascade.xml & ../cascadeEye.xml the face and eye cascades are found
 import numpy as np
 import cv2
 import dist2depth as d2d
-from matplotlib import pyplot as plt
 
 debug = True # Variable to easily turn on or off debug information
 
@@ -76,19 +75,21 @@ if False:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if False:
-	iR = cv2.imread("..\img10_1.jpeg")
+if True:
+	iR = cv2.imread("..\dataset\IMGS\\rightImage_HP000_001_H000_V000.png")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)
 	iR2 = cv2.equalizeHist(iR)
-	iL = cv2.imread("..\img10_2.jpeg")
+	iL = cv2.imread("..\dataset\IMGS\leftImage_HP000_001_H000_V000.png")
 	iL = cv2.cvtColor(iL, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("left image",iL)
 	iL2 = cv2.equalizeHist(iL)
 	dis1 = d2d.disp(iL,iR)
 
-if True:
+if 0:
+	from matplotlib import pyplot as plt
 	yv = []
+
 	imgPath = "..\img_d_50.jpeg" # enter file for faces to be detected in
 	img = cv2.imread(imgPath)
 	print("Face 50 cm:")
