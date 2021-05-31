@@ -46,7 +46,7 @@ def detectFace(image):
 				ep.append(eyeCenter)
 				radius = int(round((w2 + h2)*0.25))
 				cv2.circle(image, eyeCenter, radius, (255, 0, 0 ), 4)
-
+	
 	if debug:
 		cv2.imshow("Faces found", image)
 		cv2.waitKey(0)
@@ -55,12 +55,12 @@ def detectFace(image):
 
 
 #### RUN FILE ####
-if False:
+if 0:
 	imgPath = "..\img1.jpeg" # enter file for faces to be detected in
 	img = cv2.imread(imgPath)
 	faces,eyes,ep = detectFace(img)
 
-if False:
+if 0:
 	print("Face locations:")
 	print(faces)
 	print("\n Eyes locations within face box:")
@@ -75,7 +75,7 @@ if False:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if True:
+if 1:
 	iR = cv2.imread("..\dataset\IMGS\\rightImage_HP000_001_H000_V000.png")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)

@@ -62,6 +62,7 @@ def disp(imL: list, imR: list):
 	stereo.setSpeckleRange(10)
 	stereo.setSpeckleWindowSize(8)
 	disparity = stereo.compute(imL,imR)
-	plt.imshow(disparity,'gray')
-	plt.show()
+	if 1:
+		plt.imshow(disparity,'gray')
+		plt.show()
 	return disparity
