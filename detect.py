@@ -32,6 +32,7 @@ def detectFace(image):
 	faces = faceCascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
 	if debug:print("Found {0} faces!".format(len(faces))) # print how many faces were found
 
+	eyes = []
 	ep = []
 
 	# Draw a rectangle around the faces
@@ -46,7 +47,7 @@ def detectFace(image):
 				ep.append(eyeCenter)
 				radius = int(round((w2 + h2)*0.25))
 				cv2.circle(image, eyeCenter, radius, (255, 0, 0 ), 4)
-	
+
 	if debug:
 		cv2.imshow("Faces found", image)
 		cv2.waitKey(0)
@@ -133,3 +134,4 @@ if 0:
 	plt.plot([50, 70, 100, 140], yv)
 	plt.axis([0,140,0,max(yv)])
 	plt.show()
+
