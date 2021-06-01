@@ -101,10 +101,14 @@ if 1:
 	while(True):	# loop to display video
 		ret, frame = vid.read()						# Capture frame by frame
 		faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
+		diag = None
 		for (x,y,w,h) in faces:
 			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 			diag = np.sqrt(2*(faces[0][2]**2))
-		print("\t Inverse of diagonal: \t\t {}".format(1/diag))
+		if diag == None:
+			print("No faces were found.")
+		else:
+			print("\t Inverse of diagonal: \t\t {}".format(1/diag))
 		cv2.imshow('frame', frame)					# Show the frame
 		if cv2.waitKey(1) & 0xFF == ord('q'): break # stop capturing if q is pressed
 
