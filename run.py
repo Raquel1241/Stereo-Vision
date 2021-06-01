@@ -11,11 +11,14 @@ import dist2depth as d2d
 import detect as det
 
 #### RUN FILE ####
+
+## Single face detection run
 if 0:
 	imgPath = "..\img1.jpeg" # enter file for faces to be detected in
 	img = cv2.imread(imgPath)
 	faces,eyes,ep = det.detectFace(img)
 
+## Distance between eyes
 if 0:
 	print("Face locations:")
 	print(faces)
@@ -42,6 +45,7 @@ if 1:
 	iL2 = cv2.equalizeHist(iL)
 	dis1 = d2d.disp(iL,iR)
 
+## Diagonal of faces and the inverse
 if 0:
 	from matplotlib import pyplot as plt
 	yv = []

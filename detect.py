@@ -10,7 +10,6 @@ at ../cascade.xml & ../cascadeEye.xml the face and eye cascades are found
 import numpy as np
 import cv2
 
-
 debug = True # Variable to easily turn on or off debug information
 
 def detectFace(image):

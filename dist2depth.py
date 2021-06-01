@@ -10,13 +10,14 @@ OpenCV Stereo doc:
 	https://docs.opencv.org/master/dd/d53/tutorial_py_depthmap.html 
 """
 
-from typing import List
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
 bl = None # distance between the 2 camera's
 foc = None # Focal distance of the 2 camera's
+
+debug = True
 
 def dist2depth(dist):
 	"""Convert a disparity into a distance/depth"""
@@ -51,7 +52,8 @@ def faces2depth(fac1: list, fac2: list):
 		'''
 
 def disp(imL: list, imR: list):
-	"""A function to convert 2 grayscale images into a disparity array.
+	"""
+	A function to convert 2 grayscale images into a disparity array.
 	
 	IN:		imageLeft, imageRight (both as greyscale images)
 	OUT:	disparityMap
@@ -63,7 +65,7 @@ def disp(imL: list, imR: list):
 	stereo.setSpeckleRange(10)
 	stereo.setSpeckleWindowSize(8)
 	disparity = stereo.compute(imL,imR)
-	if 1:
+	if debug:
 		plt.imshow(disparity,'gray')
 		plt.show()
 	return disparity
@@ -83,4 +85,5 @@ def filter(dList: list, nDist: list):
 		flag = False
 	else:
 		flag = True
+	if debug: print("The new value is dropped: {}".format(flag))
 	return nList, flag
