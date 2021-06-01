@@ -10,9 +10,9 @@ at ../cascade.xml & ../cascadeEye.xml the face and eye cascades are found
 import numpy as np
 import cv2
 
-debug = True # Variable to easily turn on or off debug information
+dbg = True # Variable to easily turn on or off debug information
 
-def detectFace(image):
+def detectFace(image, debug = dbg):
 	"""
 	From an input image the face and eye locations are computed. These are returned as 2 variables (faces,eyes).
 
@@ -39,10 +39,10 @@ def detectFace(image):
 		### DETECT EYES ###
 		faceGray = gray[y:y+h,x:x+w] # Determine ROI to detect eyes within a face box
 		eyes = eyeCascade.detectMultiScale(faceGray, scaleFactor=1.1, minNeighbors=5, minSize=(20, 20))
-		if debug:
-			for (x2,y2,w2,h2) in eyes:
-				eyeCenter = (x + x2 + w2//2, y + y2 + h2//2)
-				ep.append(eyeCenter)
+		for (x2,y2,w2,h2) in eyes:
+			eyeCenter = (x + x2 + w2//2, y + y2 + h2//2)
+			ep.append(eyeCenter)
+			if debug:
 				radius = int(round((w2 + h2)*0.25))
 				cv2.circle(image, eyeCenter, radius, (255, 0, 0 ), 4)
 

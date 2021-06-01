@@ -34,7 +34,7 @@ if 0:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if 1:
+if 0:
 	iR = cv2.imread("..\dataset\IMGS\\rightImage_HP000_001_H000_V000.png")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)
@@ -93,3 +93,18 @@ if 0:
 	plt.plot([50, 70, 100, 140], yv)
 	plt.axis([0,140,0,max(yv)])
 	plt.show()
+
+## Video capture and face detection
+if 1:
+	vid = cv2.VideoCapture(0)
+	print("Press \'q\' in order to quit capturing video.")
+	while(True):	# loop to display video
+		ret, frame = vid.read()						# Capture frame by frame
+		faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
+		for (x,y,w,h) in faces:
+			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+		cv2.imshow('frame', frame)					# Show the frame
+		if cv2.waitKey(1) & 0xFF == ord('q'): break # stop capturing if q is pressed
+
+	vid.release() 				# release capture object
+	cv2.destroyAllWindows()		# close the video window
