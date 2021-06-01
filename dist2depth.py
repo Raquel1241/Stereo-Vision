@@ -10,6 +10,7 @@ OpenCV Stereo doc:
 	https://docs.opencv.org/master/dd/d53/tutorial_py_depthmap.html 
 """
 
+from typing import List
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
@@ -66,3 +67,20 @@ def disp(imL: list, imR: list):
 		plt.imshow(disparity,'gray')
 		plt.show()
 	return disparity
+
+def filter(dList: list, nDist: list):
+	"""
+	Filter out the outliers, if the new distance measurement has a too large change from the existing list.
+	flag is true if the new value is disregarded
+
+	IN:		dList, nDist
+	OUT:	nList, flag
+	"""
+	flag = None
+	nList = dList
+	if np.absolute(nDist-np.average(dList)) < 750:
+		nList.append(nDist)
+		flag = False
+	else:
+		flag = True
+	return nList, flag
