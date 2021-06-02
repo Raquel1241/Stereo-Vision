@@ -9,6 +9,7 @@ import numpy as np
 import cv2
 import dist2depth as d2d
 import detect as det
+import filter as fil
 
 #### RUN FILE ####
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -99,6 +100,7 @@ if 0:
 if 1:
 	vid = cv2.VideoCapture(0)
 	print("Press \'q\' in order to quit capturing video.")
+	meas = []
 	while(True):	# loop to display video
 		ret, frame = vid.read()						# Capture frame by frame
 		faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
@@ -107,11 +109,19 @@ if 1:
 			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 			diag = np.sqrt(2*(faces[0][2]**2))
 			cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
+
 		if diag == None:
 			print("No faces were found.")
 			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
 		else:
+			meas.append(1/diag)
+			if len(meas) > 50:
+				mLpf = fil.LPF(meas)
+				print("Filtered: \t{}".format(mLpf[-1]))
+				cv2.putText(frame,"Filtered val: {}".format(mLpf[-1]),(0,25),font,1,(255,255,255))
+				meas.pop(0)
 			print("\t Inverse of diagonal: \t\t {}".format(1/diag))
+
 		cv2.imshow('frame', frame)					# Show the frame
 		if cv2.waitKey(1) & 0xFF == ord('q'): break # stop capturing if q is pressed
 
