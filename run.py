@@ -11,6 +11,7 @@ import dist2depth as d2d
 import detect as det
 
 #### RUN FILE ####
+font = cv2.FONT_HERSHEY_SIMPLEX
 
 ## Single face detection run
 if 0:
@@ -105,8 +106,10 @@ if 1:
 		for (x,y,w,h) in faces:
 			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 			diag = np.sqrt(2*(faces[0][2]**2))
+			cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
 		if diag == None:
 			print("No faces were found.")
+			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
 		else:
 			print("\t Inverse of diagonal: \t\t {}".format(1/diag))
 		cv2.imshow('frame', frame)					# Show the frame
