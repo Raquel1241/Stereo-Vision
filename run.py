@@ -111,6 +111,7 @@ if 1:
 			cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
 
 		if diag == None:
+			meas = []
 			print("No faces were found.")
 			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
 		else:
