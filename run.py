@@ -116,7 +116,7 @@ if 1:
 			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
 		else:
 			meas.append(1/diag)
-			if len(meas) > 50:
+			if len(meas) > 30:
 				mLpf = fil.LPF(meas)
 				print("Filtered: \t{}".format(mLpf[-1]))
 				cv2.putText(frame,"Filtered val: {}".format(mLpf[-1]),(0,25),font,1,(255,255,255))
