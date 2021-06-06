@@ -97,7 +97,7 @@ if 0:
 	plt.show()
 
 ## Video capture and face detection
-if 1:
+if 0:
 	vid = cv2.VideoCapture(0)
 	print("Press \'q\' in order to quit capturing video.")
 	meas = []
@@ -128,3 +128,9 @@ if 1:
 
 	vid.release() 				# release capture object
 	cv2.destroyAllWindows()		# close the video window
+
+if 1:
+	picP = "..\eye.jpg"
+	pic = cv2.imread(picP)
+	faces,eyes,ep,r = det.detectEyes(pic)
+	print(eyes)
