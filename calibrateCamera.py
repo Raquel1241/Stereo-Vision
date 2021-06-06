@@ -5,7 +5,7 @@ import cv2 as cv
 import glob
 
 
-
+# use cv.stereoCalibrate
 ################ FIND CHESSBOARD CORNERS - OBJECT POINTS AND IMAGE POINTS #############################
 
 chessboardSize = (24,17)
