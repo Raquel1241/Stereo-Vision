@@ -9,6 +9,7 @@ at ../cascade.xml & ../cascadeEye.xml the face and eye cascades are found
 
 import numpy as np
 import cv2
+import operator as op
 
 dbg = True # Variable to easily turn on or off debug information
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -78,10 +79,14 @@ def detectEyes(image, debug = dbg):
 	#gray = cv2.equalizeHist(gray) # equalize the histogram of the gray image
 
 	eyes = eyeCascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(20, 20))
+	print(eyes)
+
 	a = np.size(eyes,0)%2
 
 	i = 0
 	for (x, y, w, h) in eyes:
+		
+
 		cv2.putText(image,"Eye {}".format(i),(x,y),font,1,(255,255,255))
 		cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 		i = i + 1
