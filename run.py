@@ -130,7 +130,7 @@ if 0:
 	cv2.destroyAllWindows()		# close the video window
 
 if 1:
-	picP = "..\eye.jpg"
+	picP = "..\img11_1.jpg"
 	pic = cv2.imread(picP)
 	faces,eyes,ep,r = det.detectEyes(pic)
 	print(eyes)
