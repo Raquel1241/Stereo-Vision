@@ -36,7 +36,7 @@ if 0:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if 0:
+if 1:
 	iR = cv2.imread("..\dataset\IMGS\\rightImage_HP000_001_H000_V000.png")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)

@@ -58,7 +58,7 @@ def disp(imL: list, imR: list):
 	IN:		imageLeft, imageRight (both as greyscale images)
 	OUT:	disparityMap
 	"""
-	stereo = cv2.StereoBM_create()
+	stereo = cv2.StereoSGBM_create()
 	stereo.setMinDisparity(1)
 	stereo.setNumDisparities(128) # multiple of 16
 	stereo.setBlockSize(13)
