@@ -36,7 +36,7 @@ if 0:
 	#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
-if 1:
+if 0:
 	iR = cv2.imread("..\dataset\IMGS\\rightImage_HP000_001_H000_V000.png")
 	iR = cv2.cvtColor(iR, cv2.COLOR_BGR2GRAY)
 	cv2.imshow("right image",iR)
@@ -97,7 +97,7 @@ if 0:
 	plt.show()
 
 ## Video capture and face detection
-if 0:
+if 1:
 	vid = cv2.VideoCapture(0)
 	print("Press \'q\' in order to quit capturing video.")
 	meas = []
@@ -116,10 +116,12 @@ if 0:
 			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
 		else:
 			meas.append(1/diag)
-			if len(meas) > 30:
-				mLpf = fil.LPF(meas)
-				print("Filtered: \t{}".format(mLpf[-1]))
-				cv2.putText(frame,"Filtered val: {}".format(mLpf[-1]),(0,25),font,1,(255,255,255))
+			if len(meas) > 10:
+				#mLpf = fil.LPF(meas)
+				#print("Filtered: \t{}".format(mLpf[-1]))
+				mLpf = fil.avg(meas)
+				print("Filtered: \t{}".format(mLpf))
+				cv2.putText(frame,"Filtered val: {}".format(mLpf),(0,25),font,1,(255,255,255))
 				meas.pop(0)
 			print("\t Inverse of diagonal: \t\t {}".format(1/diag))
 
@@ -129,7 +131,8 @@ if 0:
 	vid.release() 				# release capture object
 	cv2.destroyAllWindows()		# close the video window
 
-if 1:
+## Eye based rotation
+if 0:
 	picP = "..\img11_1.jpg"
 	pic = cv2.imread(picP)
 	faces,eyes,ep,r = det.detectEyes(pic)
