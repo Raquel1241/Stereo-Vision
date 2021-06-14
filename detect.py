@@ -22,9 +22,9 @@ def detectFace(image, debug = dbg):
 	IN:		A colour image to extract face and eye locations from
 	OUT:	Faces and Eyes locations in the image
 	"""
-	cascFace = "..\cascade.xml" # Path to the cascade which is the basis of the face detection | haarcascade_frontalface_default | https://github.com/opencv/opencv/tree/master/data/haarcascades
+	cascFace = ".\cascade.xml" # Path to the cascade which is the basis of the face detection | haarcascade_frontalface_default | https://github.com/opencv/opencv/tree/master/data/haarcascades
 	faceCascade = cv2.CascadeClassifier(cascFace)
-	cascEye = "..\cascadeEye.xml"
+	cascEye = ".\cascadeEye.xml"
 	eyeCascade = cv2.CascadeClassifier(cascEye)
 
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Convert colour image to greyscale
@@ -71,9 +71,9 @@ def detectEyes(image, debug = dbg):
 	ep = []
 	rot = 0
 
-	cascFace = "..\cascade.xml" # Path to the cascade which is the basis of the face detection | haarcascade_frontalface_default | https://github.com/opencv/opencv/tree/master/data/haarcascades
+	cascFace = ".\cascade.xml" # Path to the cascade which is the basis of the face detection | haarcascade_frontalface_default | https://github.com/opencv/opencv/tree/master/data/haarcascades
 	faceCascade = cv2.CascadeClassifier(cascFace)
-	cascEye = "..\cascadeEye.xml"
+	cascEye = ".\cascadeEye.xml"
 	eyeCascade = cv2.CascadeClassifier(cascEye)
 
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Convert colour image to greyscale
