@@ -1,7 +1,7 @@
 # Stereo-Vision
 Code for a stereo vision algorithm to measure distance to a face. Code to measure distance based on a single camera might be added in the future.
 
-The functionsa are roughly divided into three parts:
+The functions are roughly divided into three parts:
 
 	-Connection to the camera's
 	-Stereo vision computations
