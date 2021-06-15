@@ -9,10 +9,13 @@ import math
 an = None
 a1 = 1
 wn = None
-w0 = [1,1,1,1,1,1,1,1,1,1]
-w1 = [1,2,3,4,5,6,7,8,9,10]
-w2 = [1,2,4,8,16,32,64,128,256,512]
-w3 = [math.exp(0),math.exp(1),math.exp(2),math.exp(3),math.exp(4),math.exp(5),math.exp(6),math.exp(7),math.exp(8),math.exp(9)]
+filLen = 10
+w0 = w1 = w2 = w3 = []
+for i in range(filLen):
+	w0.append(1)
+	w1.append(i+1)
+	w2.append(2**i)
+	w3.append(math.exp(i))
 
 def LPF(iSig: list):
 	order = 5
