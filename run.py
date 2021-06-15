@@ -10,6 +10,7 @@ import cv2
 import dist2depth as d2d
 import detect as det
 import filter as fil
+import time
 
 #### RUN FILE ####
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -96,34 +97,53 @@ if 0:
 	plt.show()
 
 ## Video capture and face detection
-if 0:
+if 1:
 	vid = cv2.VideoCapture(0)
 	print("Press \'q\' in order to quit capturing video.")
+
+
 	meas = []
+	measT = []
+	En = 0
 	while(True):	# loop to display video
 		ret, frame = vid.read()						# Capture frame by frame
 		faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
 		diag = None
-		for (x,y,w,h) in faces:
+
+		for (x,y,w,h) in faces: #
 			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 			diag = np.sqrt(2*(faces[0][2]**2))
 			cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
 
 		if diag == None:
-			meas = []
-			print("No faces were found.")
-			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
+			En = En + 1
+			if En > 5:
+				meas = []
+				measT = []
+			elif len(meas) != 0:
+				meas.pop(0)
+				measT.pop(0)
+			print("No faces were found for {} cycles.".format(En))
+			cv2.putText(frame,"No faces were found for {} cycles.".format(En),(0,25),font,1,(255,255,255))
 		else:
+			En = 0
 			meas.append(1/diag)
-			if len(meas) > 10:
-				#mLpf = fil.LPF(meas)
-				#print("Filtered: \t{}".format(mLpf[-1]))
+			measT.append(time.process_time())
+			if len(meas) > 0:
 				mLpf = fil.avg(meas)
 				print("Filtered: \t{}".format(mLpf))
 				cv2.putText(frame,"Filtered val: {}".format(mLpf),(0,25),font,1,(255,255,255))
-				meas.pop(0)
+				#meas.pop(0)
+				#measT.pop(0)
 			print("\t Inverse of diagonal: \t\t {}".format(1/diag))
+		
+		if len(measT) != 0:
+			if (time.process_time() - measT[0] > 5.0):
+				print("Pop due to age!! {}".format(time.process_time() - measT[0]))
+				meas.pop(0)
+				measT.pop(0)
 
+		# Show image with face detected
 		cv2.imshow('frame', frame)					# Show the frame
 		if cv2.waitKey(1) & 0xFF == ord('q'): break # stop capturing if q is pressed
 
@@ -131,7 +151,7 @@ if 0:
 	cv2.destroyAllWindows()		# close the video window
 
 ## Eye based rotation
-if 1:
+if 0:
 	picP = "..\img11_1.jpg"
 	pic = cv2.imread(picP)
 	faces,eyes,ep,r = det.detectEyes(pic)
