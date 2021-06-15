@@ -19,21 +19,20 @@ if 0:
 	imgPath = "..\img1.jpeg" # enter file for faces to be detected in
 	img = cv2.imread(imgPath)
 	faces,eyes,ep = det.detectFace(img)
-
-## Distance between eyes
-if 0:
-	print("Face locations:")
-	print(faces)
-	print("\n Eyes locations within face box:")
-	print(eyes)
-	print('\n')
-	i = 0
-	while i < len(ep)/2:
-		ipd = np.sqrt((ep[2*i][0]-ep[2*i+1][0])**2 + (ep[2*i][1]-ep[2*i+1][1])**2)
-		print("Distance between eye centers is: {}".format(ipd))
-		i += 1
-	#for x,y in ep:
-	#	print("{} , {}".format(x,y))
+	## Distance between eyes
+	if 0:
+		print("Face locations:")
+		print(faces)
+		print("\n Eyes locations within face box:")
+		print(eyes)
+		print('\n')
+		i = 0
+		while i < len(ep)/2:
+			ipd = np.sqrt((ep[2*i][0]-ep[2*i+1][0])**2 + (ep[2*i][1]-ep[2*i+1][1])**2)
+			print("Distance between eye centers is: {}".format(ipd))
+			i += 1
+		#for x,y in ep:
+		#	print("{} , {}".format(x,y))
 
 ## Atempted disparity calculation
 if 0:
