@@ -96,7 +96,7 @@ if 0:
 	plt.axis([0,140,0,max(yv)])
 	plt.show()
 
-## Video capture and face detection
+## Video capture and face detection (averaging filter)
 if 1:
 	vid = cv2.VideoCapture(0)
 	print("Press \'q\' in order to quit capturing video.")
@@ -142,6 +142,54 @@ if 1:
 				print("Pop due to age!! {}".format(time.process_time() - measT[0]))
 				meas.pop(0)
 				measT.pop(0)
+
+		# Show image with face detected
+		cv2.imshow('frame', frame)					# Show the frame
+		if cv2.waitKey(1) & 0xFF == ord('q'): break # stop capturing if q is pressed
+
+	vid.release() 				# release capture object
+	cv2.destroyAllWindows()		# close the video window
+
+## Video capture and face detection (EWMA)
+if 1:
+	vid = cv2.VideoCapture(0)
+	print("Press \'q\' in order to quit capturing video.")
+
+
+	meas = []
+	movA = None
+	En = 0
+	while(True):	# loop to display video
+		ret, frame = vid.read()						# Capture frame by frame
+		faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
+		diag = None
+
+		for (x,y,w,h) in faces: #
+			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+			diag = np.sqrt(2*(faces[0][2]**2))
+			cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
+
+		if diag == None:
+			En = En + 1
+			if En > 5:
+				meas = []
+				movA = None
+			print("No faces were found for {} cycles.".format(En))
+			cv2.putText(frame,"No faces were found for {} cycles.".format(En),(0,25),font,1,(255,255,255))
+		else:
+			En = 0
+			meas.append(1/diag)
+			measT.append(time.process_time())
+			if (len(meas) > 0) & (movA != None):
+				movA = fil.eWMA(meas[-1],movA,lamb = 0.4)
+				print("Filtered: \t{}".format(movA))
+				cv2.putText(frame,"Filtered val: {}".format(movA),(0,25),font,1,(255,255,255))
+			elif (len(meas) > 0) & (movA == None):
+				movA = fil.eWMA(meas[-1],meas[-1])
+				print("Filtered: \t{}".format(movA))
+				cv2.putText(frame,"Filtered val: {}".format(movA),(0,25),font,1,(255,255,255))
+
+			print("\t Inverse of diagonal: \t\t {}".format(1/diag))
 
 		# Show image with face detected
 		cv2.imshow('frame', frame)					# Show the frame
