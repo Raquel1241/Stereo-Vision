@@ -1,3 +1,4 @@
+##!/usr/bin/env python
 """
 Document to run commands with python
 
@@ -97,7 +98,7 @@ if 0:
 	plt.show()
 
 ## Video capture and face detection (averaging filter)
-if 1:
+if 0:
 	vid = cv2.VideoCapture(0)
 	print("Press \'q\' in order to quit capturing video.")
 
@@ -151,12 +152,13 @@ if 1:
 	cv2.destroyAllWindows()		# close the video window
 
 ## Video capture and face detection (EWMA)
-if 1:
+if 0:
 	vid = cv2.VideoCapture(0)
 	print("Press \'q\' in order to quit capturing video.")
 
 
 	meas = []
+	measT = []
 	movA = None
 	En = 0
 	while(True):	# loop to display video
@@ -199,7 +201,7 @@ if 1:
 	cv2.destroyAllWindows()		# close the video window
 
 ## Eye based rotation
-if 0:
+if 1:
 	picP = "..\img11_1.jpg"
 	pic = cv2.imread(picP)
 	faces,eyes,ep,r = det.detectEyes(pic)

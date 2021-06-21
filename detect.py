@@ -12,7 +12,7 @@ import cv2
 import operator as op
 import imutils
 
-dbg = True # Variable to easily turn on or off debug information
+dbg = False # Variable to easily turn on or off debug information
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 def detectFace(image, debug = dbg):
@@ -68,7 +68,7 @@ def detectEyes(image, debug = dbg):
 	faces = []
 	eyes = []
 	ep = []
-	rot = 0
+	ang = 0
 
 	cascFace = ".\cascade.xml" # Path to the cascade which is the basis of the face detection | haarcascade_frontalface_default | https://github.com/opencv/opencv/tree/master/data/haarcascades
 	faceCascade = cv2.CascadeClassifier(cascFace)
@@ -85,7 +85,7 @@ def detectEyes(image, debug = dbg):
 
 	if a != 2:
 		print("Not 1 set eyes detected.")
-		faces,_,_ = detectFace(image)
+		faces,_,_ = detectFace(image,debug=debug)
 	else:
 		x1 = eyes[0][0]+eyes[0][2]/2
 		y1 = eyes[0][1]+eyes[0][3]/2
