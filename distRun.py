@@ -3,15 +3,20 @@ Python code to run in order to obtain a distance measurement from a video feed.
 If Setup has not been performed distSetup.py will be ran first.
 """
 # Import section
+	# Import libraries
 import os
-import distSetup
-
+import datetime
+import cv2
+	# Import own code
 import filter as fil
 import detect as det
-import cv2
+import distSetup
+	# Load and/or import variables
+from servConf import *
 
 # Global variables setting
-setupF = "calFile.txt"
+setupF 	= "calFile.txt"
+dFile 	= "dist_val.txt"
 camOption = None
 
 # Check if setup data is present
@@ -48,15 +53,34 @@ else:
 print("Press CTRL+C to exit the loop of capturing, measuring, and sending to the server.")
 while(True):
 	try:
-		a = 1	# placeholder
-		#measure
-		#	Rotation if 2 eyes
-		#	Detection -> BB
-		#filter
-		#	eWMA of diag
-		#calculate
-		#send to server
+		frame = vid.read()
+		#	measure
+		#		Rotation if 2 eyes
+		faces,_,_,_ = det.detectEyes(frame)
+		#		Detection -> BB
+		bbDiag = det.fTD(faces)
+		#	filter
+		#		eWMA of diag
+		filVal = None
+		#	calculate
+		calcVal = None
+		#	put measurement in file
+		f = open(dFile,'a')
+		f.write(calcVal + "\n")
+		f.close()
+		#	send to server
+		os.system('scp dist_val.txt {}@{}:'.format(serverUser, serverIP))
 	except KeyboardInterrupt:
+		# Log measurements when script is stoped
+		logFile = "dist_val_{}.txt".format(datetime.datetime)
+		f = open(dFile,'r')
+		tmp = f.read()
+		f.close()
+		f = open(logFile,'w')
+		f.write(tmp)
+		f.close()
+		# Server file log
+		os.system('scp {} {}@{}:'.format(logFile, serverUser, serverIP))
 		# Release all capture elements and stuff
 		vid.release()				# release capture object
 		cv2.destroyAllWindows()		# close the video window

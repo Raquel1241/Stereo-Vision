@@ -55,7 +55,6 @@ def detectFace(image, debug = dbg):
 	
 	return faces,eyes,ep
 
-#work in progress
 def detectEyes(image, debug = dbg):
 	"""
 	From an image the eyes are detected, in turn the rotation is determined and then the faces after that
@@ -86,6 +85,7 @@ def detectEyes(image, debug = dbg):
 
 	if a != 2:
 		print("Not 1 set eyes detected.")
+		faces,_,_ = detectFace(image)
 	else:
 		x1 = eyes[0][0]+eyes[0][2]/2
 		y1 = eyes[0][1]+eyes[0][3]/2
@@ -109,3 +109,12 @@ def detectEyes(image, debug = dbg):
 			i = i + 1
 		
 	return faces,eyes,ep,ang
+
+def fTD(faces):
+	"""
+	Function to transfer faces values to diagonals in a simple list
+	"""
+	dList = []
+	for (x,y,w,h) in faces:
+		dList.append(np.sqrt(w**2 + h**2))
+	return dList
