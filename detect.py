@@ -26,6 +26,7 @@ def detectFace(image, debug = dbg):
 	faceCascade = cv2.CascadeClassifier(cascFace)
 	cascEye = ".\cascadeEye.xml"
 	eyeCascade = cv2.CascadeClassifier(cascEye)
+	faces = []
 
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Convert colour image to greyscale
 	#gray = cv2.equalizeHist(gray) # equalize the histogram of the gray image
@@ -117,4 +118,13 @@ def fTiD(faces):
 	dList = []
 	for (x,y,w,h) in faces:
 		dList.append(1/np.sqrt(w**2 + h**2))
+	return dList
+
+def fTD(faces):
+	"""
+	Function to transfer faces values to diagonals in a simple list
+	"""
+	dList = []
+	for (x,y,w,h) in faces:
+		dList.append(np.sqrt(w**2 + h**2))
 	return dList

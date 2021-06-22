@@ -36,6 +36,9 @@ def avg(iSig: list,axis = an, w = w1):
 	rSig = np.average(iSig, axis = axis, weights=w)
 	return rSig
 
-def eWMA(iSig: float, MA: float, lamb = 0.8):
+def eWMA(iSig: float, MA: float, lamb = 0.6):
+	"""
+	Exponentially weighted moving average filter. With a default Lambda of 0.6
+	"""
 	rVal = lamb*iSig + (1-lamb)*MA
 	return rVal

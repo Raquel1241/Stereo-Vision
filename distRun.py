@@ -73,12 +73,13 @@ while(True):
 		if cal.camCal == 1:											# provision for undistortion in the future
 			a = [] #!!! undistort stuff
 		faces,_,_,_ = det.detectEyes(frame)							# Rotate image and extract face bounding boxes
-		invDiag = det.fTiD(faces)									# Calculate the inverse diagonals of those bounding boxes
-		if not faces.any():												# No faces detected
+		invDiag = det.fTD(faces)									# Calculate the inverse diagonals of those bounding boxes
+		if type(faces) is tuple or not faces.any():												# No faces detected
 			nFal 		+= 1											# Inrement no face detect counter
 			invDiag 	= []											# No diagonals, redundant due to det.fTiD output
 			if nFal > 15:											# too many no face detects
 				filVal 		= []										# reset moving average
+				calcVal 	= []
 		else:														# Faces detected
 			nFal 		= 0												# Reset no face counter
 			filVal = filVal[:len(invDiag)-1]							# Truncate moving average at the amount of detected faces
@@ -98,7 +99,7 @@ while(True):
 		f.close()														# Close measurement file
 		#os.system('scp {} {}@{}:'.format(dFile,serverUser, serverIP))	# Measurement to server
 	except KeyboardInterrupt:
-		logFile = "dist_val_{}.txt".format(datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S_%f"))			# Make log file name
+		logFile = "dist_val_{}.txt".format(datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S"))			# Make log file name
 		distSetup.log(dFile,logFile,1)									# Log measurements when script is stoped
 		#os.system('scp {} {}@{}:'.format(logFile, serverUser, serverIP))# Server file log
 		vid.release()				# release capture object
