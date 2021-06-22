@@ -21,6 +21,8 @@ setupF 	= "calFile.py" # if changed, also change the import lower
 dFile 	= "dist_val.txt"
 camOption = None
 
+debug = True
+
 # Check if setup data is present
 #	If present			Ask if resetup needs to be performed
 if os.path.isfile(setupF): # Setup file present
@@ -82,17 +84,21 @@ while(True):
 			filVal = filVal[:len(invDiag)-1]							# Truncate moving average at the amount of detected faces
 		for i in range(len(invDiag)): 								# For every bounding box, apply filtering
 			if i >= len(filVal): 										# if not existing, behave as first measurement
-				filVal[i] = fil.eWMA(invDiag[i], MA = invDiag[i])			# Begin moving average for i-th face
+				filVal.append(fil.eWMA(invDiag[i], MA = invDiag[i]))		# Begin moving average for i-th face
 			else:
 				filVal[i] = fil.eWMA(invDiag[i], MA = filVal[i])			# add/update moving average
 		for i in range(len(filVal)):								# Loop through EWMA values
-			calcVal[i] = fd.diag2distance(filVal[i])					# implement calculation
+			if i >= len(calcVal):
+				calcVal.append(fd.diag2distance(filVal[i]))					# implement calculation
+			else:
+				calcVal[i] = fd.diag2distance(filVal[i])					# implement calculation
+		if debug:print(calcVal)
 		f = open(dFile,'a')												# Open file to append measurement
-		f.write(str(calcVal) + "\n\t" + str(datetime.datetime) + "\n")			# Add measurement to file
+		f.write(str(calcVal) + "\n\t" + datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S_%f") + "\n")			# Add measurement to file
 		f.close()														# Close measurement file
 		#os.system('scp {} {}@{}:'.format(dFile,serverUser, serverIP))	# Measurement to server
 	except KeyboardInterrupt:
-		logFile = "dist_val_{}.txt".format(datetime.datetime)			# Make log file name
+		logFile = "dist_val_{}.txt".format(datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S_%f"))			# Make log file name
 		distSetup.log(dFile,logFile,1)									# Log measurements when script is stoped
 		#os.system('scp {} {}@{}:'.format(logFile, serverUser, serverIP))# Server file log
 		vid.release()				# release capture object
