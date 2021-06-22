@@ -64,18 +64,7 @@ img = cv.imread('left12.jpg')
 h,  w = img.shape[:2]
 newcameramtx, roi = cv.getOptimalNewCameraMatrix(cameraMatrix, dist, (w,h), 1, (w,h))
 
-
-
-# Undistort
-dst = cv.undistort(img, cameraMatrix, dist, None, newcameramtx)
-
-# crop the image
-x, y, w, h = roi
-dst = dst[y:y+h, x:x+w]
-cv.imwrite('caliResult1.png', dst)
-
-
-# Undistort with Remapping
+# Undistort with Remapping and rectification
 mapx, mapy = cv.initUndistortRectifyMap(cameraMatrix, dist, None, newcameramtx, (w,h), 5)
 dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
 
@@ -83,7 +72,6 @@ dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
 x, y, w, h = roi
 dst = dst[y:y+h, x:x+w]
 cv.imwrite('calibreulst.png', dst)
-
 
 # Reprojection Error
 mean_error = 0
@@ -94,3 +82,4 @@ for i in range(len(objpoints)):
     mean_error += error
 
 print( "total error: {}".format(mean_error/len(objpoints)) )
+
