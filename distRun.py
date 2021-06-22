@@ -12,6 +12,7 @@ import cv2
 import filter as fil
 import detect as det
 import distSetup
+import findDistance as fd
 	# Load and/or import variables
 from servConf import *
 
@@ -20,9 +21,11 @@ setupF 	= "calFile.py" # if changed, also change the import lower
 dFile 	= "dist_val.txt"
 camOption = None
 
+debug = True
+
 # Check if setup data is present
 #	If present			Ask if resetup needs to be performed
-if os.path.isfile(setupF): 								# Setup file present
+if os.path.isfile(setupF): # Setup file present
 	print("Setup file found.")
 	newSet = input("Is a new setup required? [Y/N]")
 	if newSet[0] == "Y" or newSet[0] == "y":
@@ -33,7 +36,7 @@ if os.path.isfile(setupF): 								# Setup file present
 	else:
 		print("Continuing with current setup data.")
 #	If not present		Notification and run distSetup.py
-else:													# Setup needed
+else: # Setup needed
 	print("Setup file not found, setup will be performed.")
 	distSetup.fullSetup(setupF)
 
@@ -60,34 +63,45 @@ else:
 
 # Main body
 print("Press CTRL+C to exit the loop of capturing, measuring, and sending to the server.")
+filVal 	= []	# Filtered diagonal list
+invDiag = []		# inverse of diagonal list
+calcVal = []		# actual distance
+nFal 	= 0			# Amount of no face measurements
 while(True):
 	try:
-		_,frame = vid.read()
-		if cal.camCal == 1:
-			a = 1 #!!! undistort stuff
-		#	measure
-		#		Rotation if 2 eyes
-		faces,_,_,_ = det.detectEyes(frame)
-		#		Detection -> BB
-		#.bbDiag = det.fTD(faces)
-		#	filter
-		#		eWMA of diag
-		filVal = None
-		#	calculate
-		calcVal = None
-		#	put measurement in file
-		#.f = open(dFile,'a')
-		#.f.write(calcVal + "\n")
-		#.f.close()
-		#	send to server
-		#.os.system('scp dist_val.txt {}@{}:'.format(serverUser, serverIP))
+		_,frame = vid.read()										# Read video frame
+		if cal.camCal == 1:											# provision for undistortion in the future
+			a = [] #!!! undistort stuff
+		faces,_,_,_ = det.detectEyes(frame)							# Rotate image and extract face bounding boxes
+		invDiag = det.fTD(faces)									# Calculate the inverse diagonals of those bounding boxes
+		if type(faces) is tuple or not faces.any():												# No faces detected
+			nFal 		+= 1											# Inrement no face detect counter
+			invDiag 	= []											# No diagonals, redundant due to det.fTiD output
+			if nFal > 15:											# too many no face detects
+				filVal 		= []										# reset moving average
+				calcVal 	= []
+		else:														# Faces detected
+			nFal 		= 0												# Reset no face counter
+			filVal = filVal[:len(invDiag)-1]							# Truncate moving average at the amount of detected faces
+		for i in range(len(invDiag)): 								# For every bounding box, apply filtering
+			if i >= len(filVal): 										# if not existing, behave as first measurement
+				filVal.append(fil.eWMA(invDiag[i], MA = invDiag[i]))		# Begin moving average for i-th face
+			else:
+				filVal[i] = fil.eWMA(invDiag[i], MA = filVal[i])			# add/update moving average
+		for i in range(len(filVal)):								# Loop through EWMA values
+			if i >= len(calcVal):
+				calcVal.append(fd.diag2distance(filVal[i]))					# implement calculation
+			else:
+				calcVal[i] = fd.diag2distance(filVal[i])					# implement calculation
+		if debug:print(calcVal)
+		f = open(dFile,'a')												# Open file to append measurement
+		f.write(str(calcVal) + "\n\t" + datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S_%f") + "\n")			# Add measurement to file
+		f.close()														# Close measurement file
+		#os.system('scp {} {}@{}:'.format(dFile,serverUser, serverIP))	# Measurement to server
 	except KeyboardInterrupt:
-		# 	Log measurements when script is stoped
-		logFile = "dist_val_{}.txt".format(datetime.datetime)
-		distSetup.log(dFile,logFile,1)
-		# 	Server file log
-		os.system('scp {} {}@{}:'.format(logFile, serverUser, serverIP))
-		# 	Release all capture elements and stuff
+		logFile = "dist_val_{}.txt".format(datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S"))			# Make log file name
+		distSetup.log(dFile,logFile,1)									# Log measurements when script is stoped
+		#os.system('scp {} {}@{}:'.format(logFile, serverUser, serverIP))# Server file log
 		vid.release()				# release capture object
 		cv2.destroyAllWindows()		# close the video window
 		break
