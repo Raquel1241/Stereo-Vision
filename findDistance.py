@@ -75,7 +75,7 @@ def setup(distances,mlen):
 	return a,b
 
 ######## Diagonal 2 distance ##############
-def diag2distance(diag,a,b):
+def diag2distance(diag):
 	"""
 	Function to find distance corresponding to diagonal 
 	INPUT
@@ -84,8 +84,8 @@ def diag2distance(diag,a,b):
 	b:		intercept of line
 	"""
 	# values are from linear fit, might change to function input
-	#a = 15110 # slope
-	#b = 22.0664 # intercept
+	a = 15110 # slope
+	b = 22.0664 # intercept
 	dist = a*(1/diag)+b
 	return dist
 
