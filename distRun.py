@@ -60,34 +60,39 @@ else:
 
 # Main body
 print("Press CTRL+C to exit the loop of capturing, measuring, and sending to the server.")
+filVal 	= []	# Filtered diagonal list
+invDiag = []		# inverse of diagonal list
+calcVal = []		# actual distance
+nFal 	= 0			# Amount of no face measurements
 while(True):
 	try:
-		_,frame = vid.read()
-		if cal.camCal == 1:
-			a = 1 #!!! undistort stuff
-		#	measure
-		#		Rotation if 2 eyes
-		faces,_,_,_ = det.detectEyes(frame)
-		#		Detection -> BB
-		#.bbDiag = det.fTD(faces)
-		#	filter
-		#		eWMA of diag
-		filVal = None
-		#	calculate
-		calcVal = None
-		#	put measurement in file
-		#.f = open(dFile,'a')
-		#.f.write(calcVal + "\n")
-		#.f.close()
-		#	send to server
-		#.os.system('scp dist_val.txt {}@{}:'.format(serverUser, serverIP))
+		_,frame = vid.read()										# Read video frame
+		if cal.camCal == 1:											# provision for undistortion in the future
+			a = [] #!!! undistort stuff
+		faces,_,_,_ = det.detectEyes(frame)							# Rotate image and extract face bounding boxes
+		invDiag = det.fTiD(faces)									# Calculate the inverse diagonals of those bounding boxes
+		if not faces:												# No faces detected
+			nFal 		+= 1											# Inrement no face detect counter
+			invDiag 	= []											# No diagonals, redundant due to det.fTiD output
+			if nFal > 15:											# too many no face detects
+				filVal 		= []										# reset moving average
+		else:														# Faces detected
+			nFal 		= 0												# Reset no face counter
+			filVal = filVal[:len(invDiag)-1]							# Truncate moving average at the amount of detected faces
+		for i in range(len(invDiag)): 								# For every bounding box, apply filtering
+			if i >= len(filVal): 										# if not existing, behave as first measurement
+				filVal[i] = fil.eWMA(invDiag[i], MA = invDiag[i])			# Begin moving average for i-th face
+			else:
+				filVal[i] = fil.eWMA(invDiag[i], MA = filVal[i])			# add/update moving average
+		calcVal = filVal												# implement calculation
+		f = open(dFile,'a')												# Open file to append measurement
+		f.write(calcVal + "\n\t" + datetime.datetime + "\n")			# Add measurement to file
+		f.close()														# Close measurement file
+		#os.system('scp {} {}@{}:'.format(dFile,serverUser, serverIP))	# Measurement to server
 	except KeyboardInterrupt:
-		# 	Log measurements when script is stoped
-		logFile = "dist_val_{}.txt".format(datetime.datetime)
-		distSetup.log(dFile,logFile,1)
-		# 	Server file log
-		os.system('scp {} {}@{}:'.format(logFile, serverUser, serverIP))
-		# 	Release all capture elements and stuff
+		logFile = "dist_val_{}.txt".format(datetime.datetime)			# Make log file name
+		distSetup.log(dFile,logFile,1)									# Log measurements when script is stoped
+		#os.system('scp {} {}@{}:'.format(logFile, serverUser, serverIP))# Server file log
 		vid.release()				# release capture object
 		cv2.destroyAllWindows()		# close the video window
 		break

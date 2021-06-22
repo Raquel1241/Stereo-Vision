@@ -110,11 +110,11 @@ def detectEyes(image, debug = dbg):
 		
 	return faces,eyes,ep,ang
 
-def fTD(faces):
+def fTiD(faces):
 	"""
 	Function to transfer faces values to diagonals in a simple list
 	"""
 	dList = []
 	for (x,y,w,h) in faces:
-		dList.append(np.sqrt(w**2 + h**2))
+		dList.append(1/np.sqrt(w**2 + h**2))
 	return dList
