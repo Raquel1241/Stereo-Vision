@@ -20,7 +20,7 @@ def detectFace(image, debug = dbg):
 	From an input image the face and eye locations are computed. These are returned as 2 variables (faces,eyes).
 
 	IN:		A colour image to extract face and eye locations from
-	OUT:	Faces and Eyes locations in the image
+	OUT:	Faces and Eyes locations in the image, ouput is [x,y,w,h]
 	"""
 	cascFace = ".\cascade.xml" # Path to the cascade which is the basis of the face detection | haarcascade_frontalface_default | https://github.com/opencv/opencv/tree/master/data/haarcascades
 	faceCascade = cv2.CascadeClassifier(cascFace)
@@ -33,8 +33,8 @@ def detectFace(image, debug = dbg):
 	faces = faceCascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
 	if debug:print("Found {0} faces!".format(len(faces))) # print how many faces were found
 
-	eyes = []
-	ep = []
+	eyes = [] 
+	ep = [] # position of center of eye
 
 	# Draw a rectangle around the faces
 	for (x, y, w, h) in faces:
@@ -42,10 +42,10 @@ def detectFace(image, debug = dbg):
 		### DETECT EYES ###
 		faceGray = gray[y:y+h,x:x+w] # Determine ROI to detect eyes within a face box
 		eyes = (eyeCascade.detectMultiScale(faceGray, scaleFactor=1.1, minNeighbors=5, minSize=(20, 20)))
-		for (x2,y2,w2,h2) in eyes:
+		for (x2,y2,w2,h2) in eyes: # determine center of eye
 			eyeCenter = (x + x2 + w2//2, y + y2 + h2//2)
 			ep.append(eyeCenter)
-			if debug:
+			if debug: # draw circle around eye
 				radius = int(round((w2 + h2)*0.25))
 				cv2.circle(image, eyeCenter, radius, (255, 0, 0 ), 4)
 
