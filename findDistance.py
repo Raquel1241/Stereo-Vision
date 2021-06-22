@@ -56,13 +56,13 @@ def distance2diag(distance, mlen):
 	return avgInvDiag
 	
 ####### train function ###############
-distances = [50, 70, 100, 150, 170, 200, 250]
-mlen = 100 # measurement length
-diagonals = [] # list of inverse diagonals corresponding to the distances
-for i in distances: # calculate  inverse diagonal for each distance
-	diagonals.append(distance2diag(i, mlen))
-
-print(diagonals)
+if 0:
+	distances = [50, 70, 100, 150, 170, 200, 250]
+	mlen = 100 # measurement length
+	diagonals = [] # list of inverse diagonals corresponding to the distances
+	for i in distances: # calculate  inverse diagonal for each distance
+		diagonals.append(distance2diag(i, mlen))
+	print(diagonals)
 
 ######## Diagonal 2 distance ##############
 def diag2distance(diag):

@@ -12,6 +12,7 @@ import cv2
 import filter as fil
 import detect as det
 import distSetup
+import findDistance as fd
 	# Load and/or import variables
 from servConf import *
 
@@ -22,7 +23,7 @@ camOption = None
 
 # Check if setup data is present
 #	If present			Ask if resetup needs to be performed
-if os.path.isfile(setupF): 								# Setup file present
+if os.path.isfile(setupF): # Setup file present
 	print("Setup file found.")
 	newSet = input("Is a new setup required? [Y/N]")
 	if newSet[0] == "Y" or newSet[0] == "y":
@@ -33,7 +34,7 @@ if os.path.isfile(setupF): 								# Setup file present
 	else:
 		print("Continuing with current setup data.")
 #	If not present		Notification and run distSetup.py
-else:													# Setup needed
+else: # Setup needed
 	print("Setup file not found, setup will be performed.")
 	distSetup.fullSetup(setupF)
 
@@ -84,7 +85,8 @@ while(True):
 				filVal[i] = fil.eWMA(invDiag[i], MA = invDiag[i])			# Begin moving average for i-th face
 			else:
 				filVal[i] = fil.eWMA(invDiag[i], MA = filVal[i])			# add/update moving average
-		calcVal = filVal												# implement calculation
+		for i in range(len(filVal)):								# Loop through EWMA values
+			calcVal[i] = fd.diag2distance(filVal[i])					# implement calculation
 		f = open(dFile,'a')												# Open file to append measurement
 		f.write(calcVal + "\n\t" + datetime.datetime + "\n")			# Add measurement to file
 		f.close()														# Close measurement file
