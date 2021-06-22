@@ -4,10 +4,10 @@ import time
 import detect as det
 import filter as fil
 
-
-def distance2diag(distance, mlen):
+debug = False
+def distance2invDiag(distance, mlen):
 	"""
-	Function to determine the diagonal of distance using mlen measurements
+	Function to determine the inverse diagonal of boudning box using mlen measurements
 
 	INPUT
 	distance: distance at which person is sitting
@@ -55,22 +55,81 @@ def distance2diag(distance, mlen):
 
 	return avgInvDiag
 	
-####### train function ###############
-distances = [50, 70, 100, 150, 170, 200, 250]
-mlen = 100 # measurement length
-diagonals = [] # list of inverse diagonals corresponding to the distances
-for i in distances: # calculate  inverse diagonal for each distance
-	diagonals.append(distance2diag(i, mlen))
+####### setup function ###############
+def setup(distances,mlen):
+	"""
+	Function to create the function to find distance
 
-print(diagonals)
+	INPUT
+	distances: 	distances at which to perform the setup. Array of any size
+	mlen:		amount of measurements per calculation of inverse diagonal
+
+	OUTPUT
+	a,b: slope and intercept of linear fit 
+	"""
+	invDiag = [] # list of inverse diagonals corresponding to the distances
+	for i in distances: # calculate  inverse diagonal for each distance
+		invDiag.append(distance2invDiag(i, mlen))
+
+	a, b = np.polyfit(invDiag, distances, 1)
+	return a,b
 
 ######## Diagonal 2 distance ##############
-def diag2distance(diag):
+def diag2distance(diag,a,b):
 	"""
 	Function to find distance corresponding to diagonal 
+	INPUT
+	diag: 	diagonal of bounding box
+	a:		slope of line
+	b:		intercept of line
 	"""
-	# values are from linear fit in Matlab
-	a = 15110 # slope
-	b = 22.0664 # intercept
+	# values are from linear fit, might change to function input
+	#a = 15110 # slope
+	#b = 22.0664 # intercept
 	dist = a*(1/diag)+b
 	return dist
+
+def demorun(a,b):
+	"""
+	Show distances on screen
+	a, b are the function parameters for diag2distance
+	"""
+	font = cv2.FONT_HERSHEY_SIMPLEX # font on video text
+
+	vid = cv2.VideoCapture(0)
+	while(True):	# loop to display video
+		if cv2.waitKey(1) & 0xFF == ord('q'): break # stop capturing if q is pressed
+
+		ret, frame = vid.read()						# Capture frame by frame
+		faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
+		dist = None
+		diag = None
+		for (x,y,w,h) in faces: # draw bounding box
+			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+			diag = np.sqrt(2*(faces[0][2]**2))
+			cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
+
+		if diag == None: # if no face is detected
+			print("No faces were found.")
+			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
+		else:
+			dist = diag2distance(diag,a,b) # calculate distance
+			cv2.putText(frame,"Distance: {}".format(dist),(0,25),font,1,(255,255,255))
+			print(dist) # print distance
+		cv2.imshow('frame', frame)					# Show the frame
+		
+
+	vid.release() 				# release capture object
+	cv2.destroyAllWindows()		# close the video window
+	return dist
+
+if debug:
+	#distances = [50, 70, 100, 150, 170, 200, 250]
+	#distances = [30, 35, 40, 45, 50, 60]
+	#mlen = 30 # measurement length
+	#a,b = setup(distances,mlen)
+	#print(a)
+	#print(b)
+	a = 11352.921196990614 # slope
+	b = -2.580169513293289 # intercept
+	demorun(a,b)
