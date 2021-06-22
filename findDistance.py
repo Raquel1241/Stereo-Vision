@@ -84,12 +84,12 @@ def diag2distance(diag):
 	b:		intercept of line
 	"""
 	# values are from linear fit, might change to function input
-	a = 15110 # slope
-	b = 22.0664 # intercept
+	a = 11352.921196990614 # slope
+	b = -2.580169513293289 # intercept
 	dist = a*(1/diag)+b
 	return dist
 
-def demorun(a,b):
+def demorun():
 	"""
 	Show distances on screen
 	a, b are the function parameters for diag2distance
@@ -97,30 +97,30 @@ def demorun(a,b):
 	font = cv2.FONT_HERSHEY_SIMPLEX # font on video text
 
 	vid = cv2.VideoCapture(0)
-	while(True):	# loop to display video
-		if cv2.waitKey(1) & 0xFF == ord('q'): break # stop capturing if q is pressed
+	while(True):	
+		try: # loop to display video
+			ret, frame = vid.read()						# Capture frame by frame
+			faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
+			dist = None
+			diag = None
+			for (x,y,w,h) in faces: # draw bounding box
+				cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+				diag = np.sqrt(2*(faces[0][2]**2))
+				cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
 
-		ret, frame = vid.read()						# Capture frame by frame
-		faces,_,_ = det.detectFace(frame,False) 	# Detect faces in the video
-		dist = None
-		diag = None
-		for (x,y,w,h) in faces: # draw bounding box
-			cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-			diag = np.sqrt(2*(faces[0][2]**2))
-			cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
-
-		if diag == None: # if no face is detected
-			print("No faces were found.")
-			cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
-		else:
-			dist = diag2distance(diag,a,b) # calculate distance
-			cv2.putText(frame,"Distance: {}".format(dist),(0,25),font,1,(255,255,255))
-			print(dist) # print distance
-		cv2.imshow('frame', frame)					# Show the frame
+			if diag == None: # if no face is detected
+				print("No faces were found.")
+				cv2.putText(frame,"No face found",(0,25),font,1,(255,255,255))
+			else:
+				dist = diag2distance(diag) # calculate distance
+				cv2.putText(frame,"Distance: {}".format(dist),(0,25),font,1,(255,255,255))
+				print(dist) # print distance
+			cv2.imshow('frame', frame)					# Show the frame
+		except KeyboardInterrupt: # stop demo
+			vid.release()				# release capture object
+			cv2.destroyAllWindows()		# close the video window
+			break
 		
-
-	vid.release() 				# release capture object
-	cv2.destroyAllWindows()		# close the video window
 	return dist
 
 if debug:
@@ -132,4 +132,4 @@ if debug:
 	#print(b)
 	a = 11352.921196990614 # slope
 	b = -2.580169513293289 # intercept
-	demorun(a,b)
+	demorun()

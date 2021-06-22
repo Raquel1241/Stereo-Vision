@@ -74,8 +74,8 @@ while(True):
 			a = [] #!!! undistort stuff
 		faces,_,_,_ = det.detectEyes(frame)							# Rotate image and extract face bounding boxes
 		invDiag = det.fTD(faces)									# Calculate the inverse diagonals of those bounding boxes
-		if type(faces) is tuple or not faces.any():												# No faces detected
-			nFal 		+= 1											# Inrement no face detect counter
+		if type(faces) is tuple or not faces.any():					# No faces detected
+			nFal 		+= 1											# Increment no face detect counter
 			invDiag 	= []											# No diagonals, redundant due to det.fTiD output
 			if nFal > 15:											# too many no face detects
 				filVal 		= []										# reset moving average
