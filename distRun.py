@@ -72,7 +72,7 @@ while(True):
 			a = [] #!!! undistort stuff
 		faces,_,_,_ = det.detectEyes(frame)							# Rotate image and extract face bounding boxes
 		invDiag = det.fTiD(faces)									# Calculate the inverse diagonals of those bounding boxes
-		if not faces:												# No faces detected
+		if not faces.any():												# No faces detected
 			nFal 		+= 1											# Inrement no face detect counter
 			invDiag 	= []											# No diagonals, redundant due to det.fTiD output
 			if nFal > 15:											# too many no face detects
@@ -88,7 +88,7 @@ while(True):
 		for i in range(len(filVal)):								# Loop through EWMA values
 			calcVal[i] = fd.diag2distance(filVal[i])					# implement calculation
 		f = open(dFile,'a')												# Open file to append measurement
-		f.write(calcVal + "\n\t" + datetime.datetime + "\n")			# Add measurement to file
+		f.write(str(calcVal) + "\n\t" + str(datetime.datetime) + "\n")			# Add measurement to file
 		f.close()														# Close measurement file
 		#os.system('scp {} {}@{}:'.format(dFile,serverUser, serverIP))	# Measurement to server
 	except KeyboardInterrupt:

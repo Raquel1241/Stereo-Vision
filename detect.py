@@ -79,12 +79,12 @@ def detectEyes(image, debug = dbg):
 	#gray = cv2.equalizeHist(gray) # equalize the histogram of the gray image
 
 	eyes = eyeCascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(20, 20))
-	print(eyes)
+	if debug:print(eyes)
 
 	a = np.size(eyes,0)
 
 	if a != 2:
-		print("Not 1 set eyes detected.")
+		if debug:print("Not 1 set eyes detected.")
 		faces,_,_ = detectFace(image,debug=debug)
 	else:
 		x1 = eyes[0][0]+eyes[0][2]/2
