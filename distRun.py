@@ -35,8 +35,7 @@ if os.path.isfile(setupF): # Setup file present
 		distSetup.fullSetup(setupF)
 	else:
 		print("Continuing with current setup data.")
-#	If not present		Notification and run distSetup.py
-else: # Setup needed
+else: # Setup needed	#	If not present		Notification and run distSetup.py
 	print("Setup file not found, setup will be performed.")
 	distSetup.fullSetup(setupF)
 

@@ -25,7 +25,7 @@ def LPF(iSig: list):
 	#fSig = iSig
 	return fSig
 	
-def avg(iSig: list,axis = an, w = w1):
+def Wavg(iSig: list,axis = an, w = w0):
 	if len(iSig) > len(w):
 		iSig = iSig[len(iSig)-len(w):]
 	elif len(iSig) < len(w):
@@ -34,6 +34,10 @@ def avg(iSig: list,axis = an, w = w1):
 			iSig.insert(0, 0)
 			i = i - 1
 	rSig = np.average(iSig, axis = axis, weights=w)
+	return rSig
+
+def avg(iSig: list):
+	rSig = np.average(iSig)
 	return rSig
 
 def eWMA(iSig: float, MA: float, lamb = 0.6):
