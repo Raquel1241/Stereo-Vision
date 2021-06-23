@@ -87,8 +87,8 @@ def diag2distance(diag, a = 11352.921196990614, b = -2.580169513293289):
 	b:		intercept of line
 	"""
 	# values are from linear fit, might change to function input
-	a = 11352.921196990614 # slope
-	b = -2.580169513293289 # intercept
+	#a = 11352.921196990614 # slope
+	#b = -2.580169513293289 # intercept
 	dist = a*(1/diag)+b
 	return dist
 
