@@ -89,9 +89,9 @@ while(True):
 				filVal[i] = fil.eWMA(invDiag[i], MA = filVal[i])			# add/update moving average
 		for i in range(len(filVal)):								# Loop through EWMA values
 			if i >= len(calcVal):
-				calcVal.append(fd.diag2distance(filVal[i]))					# implement calculation
+				calcVal.append(fd.diag2distance(filVal[i], cal.A, cal.B))					# implement calculation
 			else:
-				calcVal[i] = fd.diag2distance(filVal[i])					# implement calculation
+				calcVal[i] = fd.diag2distance(filVal[i], cal.A, cal.B)					# implement calculation
 		if debug:print(calcVal)
 		f = open(dFile,'a')												# Open file to append measurement
 		f.write(str(calcVal) + "\n\t" + datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S_%f") + "\n")			# Add measurement to file

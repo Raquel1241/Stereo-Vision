@@ -3,6 +3,7 @@ Program to perform a setup procedure.
 Needs to be ran in order to perform proper distance measurements.
 """
 import os
+import findDistance as fd
 
 setupFdefault = "calFile.py"
 describtion = '"""\nThis file contains the setup script values. Formatted as python variables, simply import and use.\n"""\n'
@@ -25,15 +26,25 @@ def fullSetup(setupF = setupFdefault):
 	cal = input("Does the distortion need to be corrected? [Y/N]")
 	if cal[0] == "Y" or cal[0] == "y":
 		camCal = 0
-		print("Fixing distortion not working yet, continuing without.")
+		print("Fixing distortion is not working yet, continuing without.")
 	else:
 		camCal = 0
 	# Perform validation measurement
-	#!!! implement measurement posibly
+	tmp0 = input("At what distances will the setup be performed? (in centimeters)\n\tPlease sepperate them by comma's without spaces in between. (example: '50,100,250')")
+	tmp0 = map(int,tmp0.split(','))
+	tmp1 = input("How many setup measurements will be taken per distance? [5-20]")
+	tmp1 = int(tmp1)
+	if camOption == 0:
+		setA,setB = fd.setup(tmp0,tmp1)
+	else:
+		setA,setB = fd.setup(tmp0,tmp1,camURL=camURL)
+	print("Please confirm the measurements are accurate the first time the program is ran.")
 	# Write calibration data to file
 	tmp = tmp + "camOption = " + str(camOption) + "\n"
 	tmp = tmp + "camURL = " + str(camURL) + "\n"
 	tmp = tmp + "camCal = " + str(camCal) + "\n"
+	tmp = tmp + "A = " + str(setA) + "\n"
+	tmp = tmp + "B = " + str(setB) + "\n"
 	f = open(setupF,'w')
 	f.write(tmp)
 	f.close()

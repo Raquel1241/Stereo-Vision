@@ -5,7 +5,7 @@ import detect as det
 import filter as fil
 
 debug = True
-def distance2invDiag(distance, mlen):
+def distance2invDiag(distance, mlen, camURL = None):
 	"""
 	Function to determine the inverse diagonal of boudning box using mlen measurements
 
@@ -20,7 +20,10 @@ def distance2invDiag(distance, mlen):
 	invDiag = [] # inverse of the diagonal
 	avgInvDiag = [] # average of inverse of diagonal over mlen frames
 
-	vid = cv2.VideoCapture(0)
+	if camURL == None:
+		vid = cv2.VideoCapture(0)
+	else:
+		vid = cv2.VideoCapture(camURL)
 	print("Please sit at a distance of \t{} cm away from the camera".format(distance))
 	time.sleep(10) # wait 10 s for the subject to get into place
 
@@ -56,7 +59,7 @@ def distance2invDiag(distance, mlen):
 	return avgInvDiag
 	
 ####### setup function ###############
-def setup(distances,mlen):
+def setup(distances,mlen,camURL = None):
 	"""
 	Function to create the function to find distance
 
@@ -69,13 +72,13 @@ def setup(distances,mlen):
 	"""
 	invDiag = [] # list of inverse diagonals corresponding to the distances
 	for i in distances: # calculate  inverse diagonal for each distance
-		invDiag.append(distance2invDiag(i, mlen))
+		invDiag.append(distance2invDiag(i, mlen, camURL = camURL))
 
 	a, b = np.polyfit(invDiag, distances, 1)
 	return a,b
 
 ######## Diagonal 2 distance ##############
-def diag2distance(diag):
+def diag2distance(diag, a = 11352.921196990614, b = -2.580169513293289):
 	"""
 	Function to find distance corresponding to diagonal 
 	INPUT
