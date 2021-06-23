@@ -42,7 +42,7 @@ def detectFace(image, debug = dbg):
 		if debug:cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2) # Draw rechtangle around face
 		### DETECT EYES ###
 		faceGray = gray[y:y+h,x:x+w] # Determine ROI to detect eyes within a face box
-		eyes = (eyeCascade.detectMultiScale(faceGray, scaleFactor=1.1, minNeighbors=5, minSize=(20, 20)))
+		eyes = (eyeCascade.detectMultiScale(faceGray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)))
 		for (x2,y2,w2,h2) in eyes: # determine center of eye
 			eyeCenter = (x + x2 + w2//2, y + y2 + h2//2)
 			ep.append(eyeCenter)
