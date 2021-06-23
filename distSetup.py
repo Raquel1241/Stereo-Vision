@@ -31,7 +31,7 @@ def fullSetup(setupF = setupFdefault):
 		camCal = 0
 	# Perform validation measurement
 	tmp0 = input("At what distances will the setup be performed? (in centimeters)\n\tPlease sepperate them by comma's without spaces in between. (example: '50,100,250')")
-	tmp0 = map(int,tmp0.split(','))
+	tmp0 = list(map(int,tmp0.split(',')))
 	tmp1 = input("How many setup measurements will be taken per distance? [5-20]")
 	tmp1 = int(tmp1)
 	if camOption == 0:

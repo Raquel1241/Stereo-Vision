@@ -4,7 +4,7 @@ import time
 import detect as det
 import filter as fil
 
-debug = True
+debug = False
 def distance2invDiag(distance, mlen, camURL = None):
 	"""
 	Function to determine the inverse diagonal of boudning box using mlen measurements

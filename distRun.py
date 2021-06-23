@@ -8,6 +8,7 @@ If Setup has not been performed distSetup.py will be ran first.
 import os
 import datetime
 import cv2
+import numpy as np
 	# Import own code
 import filter as fil
 import detect as det
@@ -20,8 +21,10 @@ from servConf import *
 setupF 	= "calFile.py" # if changed, also change the import lower
 dFile 	= "dist_val.txt"
 camOption = None
+font = cv2.FONT_HERSHEY_SIMPLEX
 
 debug = True
+showCamFeed = True
 
 # Check if setup data is present
 #	If present			Ask if resetup needs to be performed
@@ -81,7 +84,8 @@ while(True):
 				calcVal 	= []
 		else:														# Faces detected
 			nFal 		= 0												# Reset no face counter
-			filVal = filVal[:len(invDiag)-1]							# Truncate moving average at the amount of detected faces
+			filVal = filVal[:len(invDiag)]							# Truncate moving average at the amount of detected faces
+			calcVal = calcVal[:len(invDiag)]
 		for i in range(len(invDiag)): 								# For every bounding box, apply filtering
 			if i >= len(filVal): 										# if not existing, behave as first measurement
 				filVal.append(fil.eWMA(invDiag[i], MA = invDiag[i]))		# Begin moving average for i-th face
@@ -93,6 +97,13 @@ while(True):
 			else:
 				calcVal[i] = fd.diag2distance(filVal[i], cal.A, cal.B)					# implement calculation
 		if debug:print(calcVal)
+		if showCamFeed:
+			for (x,y,w,h) in faces: #
+				cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+				diag = np.sqrt(2*(faces[0][2]**2))
+				cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
+			cv2.imshow('frame', frame)					# Show the frame
+			cv2.waitKey(1)
 		f = open(dFile,'a')												# Open file to append measurement
 		f.write(str(calcVal) + "\n\t" + datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S_%f") + "\n")			# Add measurement to file
 		f.close()														# Close measurement file
