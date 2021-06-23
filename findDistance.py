@@ -25,7 +25,9 @@ def distance2invDiag(distance, mlen, camURL = None):
 	else:
 		vid = cv2.VideoCapture(camURL)
 	print("Please sit at a distance of \t{} cm away from the camera".format(distance))
-	time.sleep(10) # wait 10 s for the subject to get into place
+	input("Please press enter when ready to perform calibration measurement.")
+	print("You have 2 seconds until measurements begin.")
+	time.sleep(2) # wait 10 s for the subject to get into place
 
 	while(True):	# loop to display video
 		ret, frame = vid.read()						# Capture frame by frame
