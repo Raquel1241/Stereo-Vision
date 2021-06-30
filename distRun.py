@@ -101,7 +101,7 @@ while(True):
 			for (x,y,w,h) in faces: #
 				cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 				diag = np.sqrt(2*(faces[0][2]**2))
-				cv2.putText(frame,str(1/diag)[0:7],(x,y),font,1,(255,255,255))
+				cv2.putText(frame,str(calcVal[0])[0:7],(x,y),font,1,(255,255,255))
 			cv2.imshow('frame', frame)					# Show the frame
 			cv2.waitKey(1)
 		f = open(dFile,'a')												# Open file to append measurement
