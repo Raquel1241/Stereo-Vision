@@ -8,3 +8,15 @@ The functions are roughly divided into three parts:
 	-Outputting the data
 	
 This work will be performed by Raquel Simón Sabsay and Victor Schonk, in collaboration with H.E.J. Bosma, T.P. Breedveld, K. Koopman, J.N. de Peinder, and E. Tansug.
+
+The files 
+	distSetup.py
+	distRun.py
+Are used for the setup and calibration procecdure and the running of the system.
+
+Other files are used to cleanup functions and actions. This could use some cleaning up.
+
+Files in which setup and configuration are stored:
+
+	-servConf.py
+	-calFile.py
